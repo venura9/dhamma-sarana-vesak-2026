@@ -50,6 +50,8 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global credential.helper store
+          echo "https://${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
           git add Advertisement/vesak_sinhala_azure*.mp4 Advertisement/vesak_english_azure*.mp4 Advertisement/generate_videos.log
           if git diff --cached --quiet; then
             echo "No changes to commit."
