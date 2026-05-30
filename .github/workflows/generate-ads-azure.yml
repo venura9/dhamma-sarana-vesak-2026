@@ -48,6 +48,7 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
+            git fetch origin main
             git commit -m "ci: regenerate advertisement videos via Azure TTS [skip ci]"
             git push https://${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}.git
           fi
