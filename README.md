@@ -51,6 +51,18 @@ All three workflows run on macOS runners and push results back to the `main` bra
 
 Downloads any URLs in `videos.txt` that have not been fetched before (tracked via `download_archive.txt`). New `.mp4` files are stored in Git LFS and committed back automatically.
 
+**Required secrets:**
+
+| Secret | Description |
+|---|---|
+| `YOUTUBE_COOKIES` | Netscape-format cookie file exported from a browser signed into YouTube — required because GitHub runners are flagged as bots. See [yt-dlp cookie docs](https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp) for how to export. |
+
+To export cookies from Chrome on macOS:
+```bash
+yt-dlp --cookies-from-browser chrome --cookies cookies.txt --skip-download "https://youtu.be/any"
+# Then paste the contents of cookies.txt into the YOUTUBE_COOKIES secret
+```
+
 ### 2. Generate Ads — Azure TTS (`generate-ads-azure.yml`)
 
 **Trigger:** Push to `main` when any `Advertisement/` source file changes, or manual dispatch.

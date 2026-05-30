@@ -7,6 +7,9 @@ on:
       - videos.txt
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   download:
     runs-on: macos-latest
@@ -16,11 +19,14 @@ jobs:
         uses: actions/checkout@v4
         with:
           lfs: true
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install yt-dlp and ffmpeg
-        run: |
-          brew install yt-dlp ffmpeg
+        run: brew install yt-dlp ffmpeg
+
+      - name: Write YouTube cookies
+        env:
+          YOUTUBE_COOKIES: ${{ secrets.YOUTUBE_COOKIES }}
+        run: echo "$YOUTUBE_COOKIES" > cookies.txt
 
       - name: Download new videos
         run: |
@@ -28,7 +34,9 @@ jobs:
             --merge-output-format mp4 \
             -o "%(title)s.%(ext)s" \
             --download-archive download_archive.txt \
+            --cookies cookies.txt \
             -a videos.txt 2>&1 | tee download.log
+          rm -f cookies.txt
 
       - name: Check for new files
         id: check
