@@ -67,7 +67,7 @@ HTTP_STATUS=$(curl -X POST \
   -d "<?xml version='1.0'?>
 <speak version='1.0' xml:lang='si-LK'>
   <voice name='si-LK-ThiliniNeural'>
-    <prosody rate='-30%'>
+    <prosody rate='-35%'>
       ${SINHALA_TEXT}
     </prosody>
   </voice>
@@ -92,7 +92,9 @@ HTTP_STATUS=$(curl -X POST \
   -d "<?xml version='1.0'?>
 <speak version='1.0' xml:lang='en-AU'>
   <voice name='en-AU-WilliamMultilingualNeural'>
-    ${ENGLISH_TEXT}
+    <prosody rate='-30%'>
+      ${ENGLISH_TEXT}
+    </prosody>
   </voice>
 </speak>")
 
