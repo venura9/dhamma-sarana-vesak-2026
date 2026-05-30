@@ -83,7 +83,7 @@ python3 -m edge_tts \
 
 echo "Creating Sinhala video..."
 ffmpeg -y -loop 1 -i "$POSTER" -i "$SINHALA_AUDIO" \
-    -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" \
+    -vf 'scale=trunc(iw/2)*2:trunc(ih/2)*2' \
     -c:v libx264 -tune stillimage \
     -c:a aac -b:a 192k \
     -pix_fmt yuv420p -shortest \
@@ -91,7 +91,7 @@ ffmpeg -y -loop 1 -i "$POSTER" -i "$SINHALA_AUDIO" \
 
 echo "Creating English video..."
 ffmpeg -y -loop 1 -i "$POSTER" -i "$ENGLISH_AUDIO" \
-    -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" \
+    -vf 'scale=trunc(iw/2)*2:trunc(ih/2)*2' \
     -c:v libx264 -tune stillimage \
     -c:a aac -b:a 192k \
     -pix_fmt yuv420p -shortest \
