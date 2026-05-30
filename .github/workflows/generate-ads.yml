@@ -34,21 +34,25 @@ jobs:
         working-directory: Advertisement
         run: bash generate_videos.sh
 
-      - name: Create dated snapshots
-        working-directory: Advertisement
-        run: |
-          STAMP=$(date +%Y%m%d_%H%M)
-          cp vesak_sinhala.mp4 "vesak_sinhala_${STAMP}.mp4"
-          cp vesak_english.mp4 "vesak_english_${STAMP}.mp4"
-
       - name: Commit and push generated videos
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add Advertisement/vesak_sinhala*.mp4 Advertisement/vesak_english*.mp4 Advertisement/generate_videos.log
+          git add Advertisement/vesak_sinhala.mp4 Advertisement/vesak_english.mp4 Advertisement/generate_videos.log
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
             git commit -m "ci: regenerate advertisement videos via Edge TTS [skip ci]"
             git push https://${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}.git
           fi
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="ads-edge-$(date +%Y%m%d-%H%M)"
+          gh release create "$TAG" \
+            Advertisement/vesak_sinhala.mp4 \
+            Advertisement/vesak_english.mp4 \
+            --title "Ad Videos (Edge TTS) $(date +%Y-%m-%d %H:%M)" \
+            --notes "Advertisement videos generated via Edge TTS."
