@@ -66,7 +66,7 @@ HTTP_STATUS=$(curl -X POST \
   -o "$SINHALA_AUDIO" \
   -d "<?xml version='1.0'?>
 <speak version='1.0' xml:lang='si-LK'>
-  <voice name='si-LK-ThiliniNeural'>
+  <voice name='si-LK-SameeraNeural'>
     <prosody rate='-35%'>
       ${SINHALA_TEXT}
     </prosody>
