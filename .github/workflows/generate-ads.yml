@@ -10,6 +10,9 @@ on:
       - Advertisement/generate_videos.sh
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   generate:
     runs-on: macos-latest
@@ -20,6 +23,7 @@ jobs:
         with:
           lfs: true
           token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: true
 
       - name: Install ffmpeg and edge-tts
         run: |
@@ -46,5 +50,5 @@ jobs:
             echo "No changes to commit."
           else
             git commit -m "ci: regenerate advertisement videos via Edge TTS [skip ci]"
-            git push
+            git push https://${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}.git
           fi
