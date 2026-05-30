@@ -5,8 +5,8 @@
 # Uses Azure Cognitive Services TTS
 # ─────────────────────────────────────────
 
-AZURE_KEY=""
-AZURE_REGION="australiaeast"
+AZURE_KEY="${AZURE_KEY:-}"
+AZURE_REGION="${AZURE_REGION:-australiaeast}"
 
 POSTER="poster.jpg"
 SINHALA_SCRIPT="sinhala_script.txt"

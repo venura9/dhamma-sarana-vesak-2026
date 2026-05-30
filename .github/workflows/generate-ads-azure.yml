@@ -34,9 +34,7 @@ jobs:
           AZURE_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
           AZURE_REGION: ${{ secrets.AZURE_SPEECH_REGION || 'australiaeast' }}
         run: |
-          sed "s/AZURE_KEY=\"\"/AZURE_KEY=\"${AZURE_KEY}\"/" generate_videos_azure.sh \
-            | sed "s/AZURE_REGION=\"australiaeast\"/AZURE_REGION=\"${AZURE_REGION}\"/" \
-            | bash
+          bash generate_videos_azure.sh
           mv vesak_sinhala.mp4 vesak_sinhala_azure.mp4
           mv vesak_english.mp4 vesak_english_azure.mp4
 
