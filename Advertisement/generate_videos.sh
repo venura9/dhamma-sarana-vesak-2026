@@ -66,7 +66,7 @@ fi
 echo "Generating Sinhala audio..."
 python3 -m edge_tts \
     --voice "si-LK-ThiliniNeural" \
-    --rate="-20%" \
+    --rate="-35%" \
     --file "$SINHALA_SCRIPT" \
     --write-media "$SINHALA_AUDIO"
 
