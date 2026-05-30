@@ -22,6 +22,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           lfs: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: true
 
       - name: Install ffmpeg
         run: brew install ffmpeg
@@ -32,7 +34,6 @@ jobs:
           AZURE_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
           AZURE_REGION: ${{ secrets.AZURE_SPEECH_REGION || 'australiaeast' }}
         run: |
-          # Inject key and region into script before running
           sed "s/AZURE_KEY=\"\"/AZURE_KEY=\"${AZURE_KEY}\"/" generate_videos_azure.sh \
             | sed "s/AZURE_REGION=\"australiaeast\"/AZURE_REGION=\"${AZURE_REGION}\"/" \
             | bash
@@ -50,12 +51,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global credential.helper store
-          echo "https://${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
           git add Advertisement/vesak_sinhala_azure*.mp4 Advertisement/vesak_english_azure*.mp4 Advertisement/generate_videos.log
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
             git commit -m "ci: regenerate advertisement videos via Azure TTS [skip ci]"
-            git push
+            git push origin main
           fi
