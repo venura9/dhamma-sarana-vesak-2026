@@ -62,4 +62,4 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git commit -m "ci: add newly downloaded videos [skip ci]"
-          git push origin main
+          git push https://${{ secrets.PAT_TOKEN }}@github.com/${{ github.repository }}.git
