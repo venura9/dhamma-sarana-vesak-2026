@@ -13,6 +13,7 @@ permissions:
 jobs:
   download:
     runs-on: macos-latest
+    environment: production
 
     steps:
       - name: Checkout repository
