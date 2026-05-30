@@ -27,7 +27,7 @@ jobs:
 
       - name: Install ffmpeg and edge-tts
         run: |
-          brew install ffmpeg python
+          brew install ffmpeg
           pip3 install edge-tts --break-system-packages
 
       - name: Generate videos via Edge TTS
