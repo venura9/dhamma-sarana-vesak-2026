@@ -30,6 +30,12 @@ jobs:
           YOUTUBE_COOKIES: ${{ secrets.YOUTUBE_COOKIES }}
         run: echo "$YOUTUBE_COOKIES" | base64 --decode > cookies.txt
 
+      - name: Debug cookies
+        env:
+          YOUTUBE_COOKIES: ${{ secrets.YOUTUBE_COOKIES }}
+        run: |
+          echo "$YOUTUBE_COOKIES" | base64 --decode | head -5
+
       - name: Download new videos
         run: |
           yt-dlp -f "bestvideo[ext=mp4][height<=1080]+bestaudio[ext=m4a]/bestvideo[height<=1080]+bestaudio/best" \
