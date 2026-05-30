@@ -26,7 +26,7 @@ jobs:
       - name: Write YouTube cookies
         env:
           YOUTUBE_COOKIES: ${{ secrets.YOUTUBE_COOKIES }}
-        run: echo "$YOUTUBE_COOKIES" > cookies.txt
+        run: echo "$YOUTUBE_COOKIES" | base64 --decode > cookies.txt
 
       - name: Download new videos
         run: |
