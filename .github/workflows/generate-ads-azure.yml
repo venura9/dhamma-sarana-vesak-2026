@@ -1,0 +1,57 @@
+name: Generate Advertisement Videos (Azure TTS)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - Advertisement/sinhala_script.txt
+      - Advertisement/english_script.txt
+      - Advertisement/poster.jpg
+      - Advertisement/generate_videos_azure.sh
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install ffmpeg
+        run: brew install ffmpeg
+
+      - name: Generate videos via Azure TTS
+        working-directory: Advertisement
+        env:
+          AZURE_KEY: ${{ secrets.AZURE_SPEECH_KEY }}
+          AZURE_REGION: ${{ secrets.AZURE_SPEECH_REGION || 'australiaeast' }}
+        run: |
+          # Inject key and region into script before running
+          sed "s/AZURE_KEY=\"\"/AZURE_KEY=\"${AZURE_KEY}\"/" generate_videos_azure.sh \
+            | sed "s/AZURE_REGION=\"australiaeast\"/AZURE_REGION=\"${AZURE_REGION}\"/" \
+            | bash
+
+      - name: Rename outputs to Azure-specific names
+        working-directory: Advertisement
+        run: |
+          STAMP=$(date +%Y%m%d_%H%M)
+          cp vesak_sinhala.mp4 "vesak_sinhala_azure_${STAMP}.mp4"
+          cp vesak_english.mp4 "vesak_english_azure_${STAMP}.mp4"
+          mv vesak_sinhala.mp4 vesak_sinhala_azure.mp4
+          mv vesak_english.mp4 vesak_english_azure.mp4
+
+      - name: Commit and push generated videos
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Advertisement/vesak_sinhala_azure*.mp4 Advertisement/vesak_english_azure*.mp4 Advertisement/generate_videos.log
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "ci: regenerate advertisement videos via Azure TTS [skip ci]"
+            git push
+          fi
